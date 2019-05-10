@@ -7,8 +7,10 @@
  */
 
 import React, { Component } from 'react';
-import { Image, Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { createStackNavigator, createAppContainer} from 'react-navigation';
+import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import RadioForm from 'react-native-simple-radio-button';
+import { CheckBox, Button } from 'react-native-elements';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 const bloodRed = '#D23E3E';
 
@@ -16,34 +18,55 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'stretch',
+        alignItems: 'center',
         padding: 10,
     },
     input: {
         backgroundColor: bloodRed,
         color: 'white',
         height: 40,
-        borderRadius: 15,
         padding: 10,
         marginBottom: 10,
     },
     text: {
+        fontSize: 14,
         color: bloodRed,
         alignSelf: 'center',
-        margin: 10,
+    },
+    button: {
+        backgroundColor: bloodRed,
+        borderRadius: 15,
     },
 });
+
+class SplashScreen extends Component {
+    constructor(props) {
+        super(props);
+
+        setTimeout(() => this.props.navigation.navigate('SignIn'), 1000);
+    }
+    render() {
+        return (
+            <View style={styles.container}>
+                <Image
+                    style={{ height: 300, resizeMode: 'contain' }}
+                    source={require('./logo_subtitle.png')}
+                />
+            </View>
+        );
+    }
+}
 
 class SignInScreen extends Component {
     render() {
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { alignItems: 'stretch' }]}>
                 <Image
                     style={{ flex: 1, alignSelf: 'center' }}
                     resizeMode="contain"
                     source={require('./logo.png')}
                 />
-                <View style={styles.container}>
+                <View style={[styles.container, { alignItems: 'stretch' }]}>
                     <TextInput
                         style={styles.input}
                         placeholder="Email or Username"
@@ -55,7 +78,7 @@ class SignInScreen extends Component {
                         placeholderTextColor="white"
                         secureTextEntry={true}
                     />
-                    <Button color={bloodRed} title="Log in" />
+                    <Button buttonStyle={styles.button} title="Log in" />
 
                     <Text
                         style={[
@@ -68,39 +91,115 @@ class SignInScreen extends Component {
 
                 <Text style={[styles.text, { fontSize: 20 }]}>OR</Text>
                 <Button
-                    color={bloodRed}
+                    buttonStyle={styles.button}
                     title="Register"
-                    onPress={() =>
-                        this.props.navigation.navigate('Register' )
-                    } />
+                    onPress={() => this.props.navigation.navigate('Register')}
+                />
             </View>
         );
     }
 }
+
+let radio_props = [
+    {label: 'Individual', value: 1},
+    {label: 'Organization', value: 0},
+];
 
 class RegisterScreen extends Component {
+    state = {
+        checked: false,
+    };
     render() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Details Screen</Text>
+            <View
+                style={[
+                    styles.container,
+                    { alignItems: 'stretch', justifyContent: 'flex-end' },
+                ]}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Full Name"
+                    placeholderTextColor="white"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email or Phonenumber"
+                    placeholderTextColor="white"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="white"
+                    secureTextEntry={true}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirm Password"
+                    placeholderTextColor="white"
+                    secureTextEntry={true}
+                />
+                <RadioForm
+                    buttonColor={bloodRed}
+                    labelColor={bloodRed}
+                    selectedButtonColor={bloodRed}
+                    radio_props={radio_props}
+                    labelStyle={{ marginRight: 15 }}
+                    formHorizontal={true}
+                    onPress={value => {
+                        this.setState({ value: value });
+                    }}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Contact no."
+                    placeholderTextColor="white"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Address"
+                    placeholderTextColor="white"
+                />
+                <CheckBox
+                    title="By registering, you agree to our Terms of use"
+                    checked={this.state.checked}
+                    onPress={() => this.setState({ checked: !this.state.checked })}
+                    textStyle={{ color: bloodRed, fontSize: 13 }}
+                    checkedColor={bloodRed}
+                />
+                <Button
+                    buttonStyle={[styles.button, { marginBottom: 40 }]}
+                    title="Create Account"
+                />
+
+                <Text style={styles.text}>Already have an account ?</Text>
+
+                <Button
+                    buttonStyle={styles.button}
+                    title="Sign In"
+                    onPress={() => this.props.navigation.navigate('SignIn')}
+                />
             </View>
         );
     }
 }
 
-const AppNavigator = createStackNavigator(
+const AppNavigator = createSwitchNavigator(
     {
         SignIn: {
             screen: SignInScreen,
-            navigationOptions: { header: null }
+            navigationOptions: { header: null },
         },
         Register: {
             screen: RegisterScreen,
-            navigationOptions:{ header: null }
+            navigationOptions: { header: null },
+        },
+        Splash: {
+            screen: SplashScreen,
+            navigationOptions: { header: null },
         },
     },
     {
-        initialRouteName: 'SignIn'
+        initialRouteName: 'Splash',
     }
 );
 

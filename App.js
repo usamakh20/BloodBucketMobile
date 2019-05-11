@@ -343,7 +343,7 @@ const AppNavigator = createSwitchNavigator(
         },
     },
     {
-        initialRouteName: 'Home',
+        initialRouteName: 'Splash',
     }
 );
 

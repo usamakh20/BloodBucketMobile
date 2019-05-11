@@ -9,8 +9,9 @@
 import React, { Component } from 'react';
 import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
-import { CheckBox, Button } from 'react-native-elements';
+import { Button, ListItem,SearchBar } from 'react-native-elements';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { Appbar, Checkbox, FAB } from 'react-native-paper';
 
 const bloodRed = '#D23E3E';
 
@@ -37,7 +38,64 @@ const styles = StyleSheet.create({
         backgroundColor: bloodRed,
         borderRadius: 15,
     },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+        backgroundColor: bloodRed,
+    },
+    searchContainer: {
+        backgroundColor: 'transparent',
+        borderBottomColor: 'transparent',
+        borderTopColor: 'transparent',
+    },
+    appBar: {
+        backgroundColor: bloodRed,
+        justifyContent: 'flex-end',
+    },
+    subtitleView: {
+        flexDirection: 'row',
+        paddingRight: 10,
+    },
+    subtitleText: {
+        margin:10,
+        color: 'white',
+        backgroundColor:bloodRed
+    },
+    titleText: {
+        margin:10,
+        color: 'white',
+        backgroundColor:bloodRed
+    }
 });
+
+const list = [
+    {
+        title: 'Appointments',
+        contact:'loreum ipsum',
+        location: 'Lahore',
+        type:'A+'
+    },
+    {
+        title: 'Appointments',
+        contact:'loreum ipsum',
+        location: 'Lahore',
+        type:'A+'
+    },
+    {
+        title: 'Appointments',
+        contact:'loreum ipsum',
+        location: 'Lahore',
+        type:'A+'
+    },
+    {
+        title: 'Appointments',
+        contact:'loreum ipsum',
+        location: 'Lahore',
+        type:'A+'
+    },
+];
 
 class SplashScreen extends Component {
     constructor(props) {
@@ -50,7 +108,7 @@ class SplashScreen extends Component {
             <View style={styles.container}>
                 <Image
                     style={{ height: 300, resizeMode: 'contain' }}
-                    source={require('./logo_subtitle.png')}
+                    source={require('./assets/logo_subtitle.png')}
                 />
             </View>
         );
@@ -64,7 +122,7 @@ class SignInScreen extends Component {
                 <Image
                     style={{ flex: 1, alignSelf: 'center' }}
                     resizeMode="contain"
-                    source={require('./logo.png')}
+                    source={require('./assets/logo.png')}
                 />
                 <View style={[styles.container, { alignItems: 'stretch' }]}>
                     <TextInput
@@ -78,7 +136,9 @@ class SignInScreen extends Component {
                         placeholderTextColor="white"
                         secureTextEntry={true}
                     />
-                    <Button buttonStyle={styles.button} title="Log in" />
+                    <Button buttonStyle={styles.button}
+                            title="Log in"
+                            onPress={() => this.props.navigation.navigate('Home')}/>
 
                     <Text
                         style={[
@@ -101,8 +161,8 @@ class SignInScreen extends Component {
 }
 
 let radio_props = [
-    {label: 'Individual', value: 1},
-    {label: 'Organization', value: 0},
+    { label: 'Individual', value: 1 },
+    { label: 'Organization', value: 0 },
 ];
 
 class RegisterScreen extends Component {
@@ -110,6 +170,7 @@ class RegisterScreen extends Component {
         checked: false,
     };
     render() {
+        const { checked } = this.state;
         return (
             <View
                 style={[
@@ -159,16 +220,32 @@ class RegisterScreen extends Component {
                     placeholder="Address"
                     placeholderTextColor="white"
                 />
-                <CheckBox
-                    title="By registering, you agree to our Terms of use"
-                    checked={this.state.checked}
-                    onPress={() => this.setState({ checked: !this.state.checked })}
-                    textStyle={{ color: bloodRed, fontSize: 13 }}
-                    checkedColor={bloodRed}
-                />
+                <View style={{ flexDirection: 'row' }}>
+                    <Checkbox
+                        status={checked ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                            this.setState({ checked: !checked });
+                        }}
+                        color={bloodRed}
+                    />
+                    <Text style={{ marginTop: 6, color: bloodRed }}>
+                        {' '}
+                        By registering, you agree to our{' '}
+                    </Text>
+                    <Text
+                        style={{
+                            marginTop: 6,
+                            color: bloodRed,
+                            textDecorationLine: 'underline',
+                            fontWeight: 'bold',
+                        }}>
+                        Terms of use
+                    </Text>
+                </View>
                 <Button
-                    buttonStyle={[styles.button, { marginBottom: 40 }]}
+                    buttonStyle={[styles.button, { marginBottom: 80 }]}
                     title="Create Account"
+                    onPress={() => this.props.navigation.navigate('Home')}
                 />
 
                 <Text style={styles.text}>Already have an account ?</Text>
@@ -178,6 +255,69 @@ class RegisterScreen extends Component {
                     title="Sign In"
                     onPress={() => this.props.navigation.navigate('SignIn')}
                 />
+            </View>
+        );
+    }
+}
+
+class HomeScreen extends Component {
+    state = {
+        firstQuery: '',
+    };
+    render() {
+        const { firstQuery } = this.state;
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'flex-start',
+                    alignItems: 'stretch',
+                }}>
+                <Appbar style={styles.appBar}>
+                    <Appbar.Action
+                        icon='person'
+                        onPress={() => console.log('Pressed archive')}
+                        style={{ alignSelf: 'center' }}
+                    />
+                    <Appbar.Action
+                        icon='launch'
+                        onPress={() => console.log('Pressed archive')}
+                    />
+                </Appbar>
+                <SearchBar
+                    placeholder="Search"
+                    onChangeText={query => {
+                        this.setState({ firstQuery: query });
+                    }}
+                    value={firstQuery}
+                    lightTheme={true}
+                    containerStyle={styles.searchContainer}
+                    inputContainerStyle={{ backgroundColor: bloodRed, borderRadius: 20 }}
+                    inputStyle={{ color: 'white' }}
+                    placeholderTextColor="white"
+                    searchIcon={{ color: 'white' }}
+                    cancelIcon={{color:'white'}}
+                />
+                <FAB
+                    style={styles.fab}
+                    icon="add"
+                    onPress={() => console.log('Pressed')}
+                />
+                {
+                    list.map((item, i) => (
+                        <ListItem
+                            key={i}
+                            title={item.title}
+                            subtitle={
+                                <View style={styles.subtitleView}>
+                                    <Text style={styles.subtitleText}>{item.contact}</Text>
+                                    <Text style={styles.subtitleText}>{item.location}</Text>
+                                    <Text style={styles.subtitleText}>{item.type}</Text>
+                                </View>
+                            }
+                        />
+                    ))
+                }
             </View>
         );
     }
@@ -197,9 +337,13 @@ const AppNavigator = createSwitchNavigator(
             screen: SplashScreen,
             navigationOptions: { header: null },
         },
+        Home: {
+            screen: HomeScreen,
+            navigationOptions: { header: null },
+        },
     },
     {
-        initialRouteName: 'Splash',
+        initialRouteName: 'Home',
     }
 );
 

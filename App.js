@@ -274,6 +274,9 @@ class HomeScreen extends Component {
                     alignItems: 'stretch',
                 }}>
                 <Appbar style={styles.appBar}>
+                    <Appbar.Content
+                        title="Blood Bucket"
+                    />
                     <Appbar.Action
                         icon='person'
                         onPress={() => console.log('Pressed archive')}

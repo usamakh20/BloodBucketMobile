@@ -7,13 +7,21 @@
  */
 
 import React, { Component } from 'react';
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
-import { Button, ListItem,SearchBar } from 'react-native-elements';
+import { Button, SearchBar } from 'react-native-elements';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { Appbar, Checkbox, FAB } from 'react-native-paper';
 
 const bloodRed = '#D23E3E';
+const bloodRedBackground = 'rgba(210, 62, 62,0.1)';
 
 const styles = StyleSheet.create({
     container: {
@@ -55,45 +63,81 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     subtitleView: {
+        flex: 1,
         flexDirection: 'row',
-        paddingRight: 10,
+        justifyContent: 'space-between',
+        alignItems:'stretch',
+        marginTop: 10,
+        marginBottom: 10,
     },
     subtitleText: {
-        margin:10,
+        flex:1,
+        textAlign:'center',
+        marginRight: 10,
         color: 'white',
-        backgroundColor:bloodRed
+        backgroundColor: bloodRed,
+        padding:5,
+    },
+    listView: {
+        backgroundColor: bloodRedBackground,
+        margin: 10,
+        padding: 10,
     },
     titleText: {
-        margin:10,
-        color: 'white',
-        backgroundColor:bloodRed
-    }
+        color: bloodRed,
+        fontSize:20,
+    },
 });
 
 const list = [
     {
-        title: 'Appointments',
-        contact:'loreum ipsum',
+        key: '1',
+        name: 'Usama Khalid',
+        contact: '0335-2437814',
         location: 'Lahore',
-        type:'A+'
+        type: 'A+',
     },
     {
-        title: 'Appointments',
-        contact:'loreum ipsum',
+        key: '2',
+        name: 'Usama Khalid',
+        contact: '0335-2437814',
         location: 'Lahore',
-        type:'A+'
+        type: 'A+',
     },
     {
-        title: 'Appointments',
-        contact:'loreum ipsum',
+        key: '3',
+        name: 'Usama Khalid',
+        contact: '0335-2437814',
         location: 'Lahore',
-        type:'A+'
+        type: 'A+',
     },
     {
-        title: 'Appointments',
-        contact:'loreum ipsum',
+        key: '4',
+        name: 'Usama Khalid',
+        contact: '0335-2437814',
         location: 'Lahore',
-        type:'A+'
+        type: 'A+',
+    },
+    {
+        key: '5',
+        name: 'Usama Khalid',
+        contact: '0335-2437814',
+        location: 'Lahore',
+        type: 'A+',
+    },
+    {
+        key: '6',
+        name: 'Usama Khalid',
+        contact: '0335-2437814',
+        location: 'Lahore',
+        type: 'A+',
+    },
+    {
+        key: '7',
+        name: 'Usama Khalid',
+        contact: '0335-2437814',
+        location: 'Lahore',
+        type: 'A+',
     },
 ];
 
@@ -136,9 +180,11 @@ class SignInScreen extends Component {
                         placeholderTextColor="white"
                         secureTextEntry={true}
                     />
-                    <Button buttonStyle={styles.button}
-                            title="Log in"
-                            onPress={() => this.props.navigation.navigate('Home')}/>
+                    <Button
+                        buttonStyle={styles.button}
+                        title="Log in"
+                        onPress={() => this.props.navigation.navigate('Home')}
+                    />
 
                     <Text
                         style={[
@@ -274,17 +320,10 @@ class HomeScreen extends Component {
                     alignItems: 'stretch',
                 }}>
                 <Appbar style={styles.appBar}>
-                    <Appbar.Content
-                        title="Blood Bucket"
-                    />
+                    <Appbar.Content title="Blood Bucket" />
                     <Appbar.Action
-                        icon='person'
-                        onPress={() => console.log('Pressed archive')}
-                        style={{ alignSelf: 'center' }}
-                    />
-                    <Appbar.Action
-                        icon='launch'
-                        onPress={() => console.log('Pressed archive')}
+                        icon="launch"
+                        onPress={() => this.props.navigation.navigate('SignIn')}
                     />
                 </Appbar>
                 <SearchBar
@@ -299,28 +338,27 @@ class HomeScreen extends Component {
                     inputStyle={{ color: 'white' }}
                     placeholderTextColor="white"
                     searchIcon={{ color: 'white' }}
-                    cancelIcon={{color:'white'}}
+                    cancelIcon={{ color: 'white' }}
                 />
                 <FAB
                     style={styles.fab}
                     icon="add"
                     onPress={() => console.log('Pressed')}
                 />
-                {
-                    list.map((item, i) => (
-                        <ListItem
-                            key={i}
-                            title={item.title}
-                            subtitle={
-                                <View style={styles.subtitleView}>
-                                    <Text style={styles.subtitleText}>{item.contact}</Text>
-                                    <Text style={styles.subtitleText}>{item.location}</Text>
-                                    <Text style={styles.subtitleText}>{item.type}</Text>
-                                </View>
-                            }
-                        />
-                    ))
-                }
+                <FlatList
+                    style={{ padding: 10 }}
+                    data={list}
+                    renderItem={({ item }) => (
+                        <View style={styles.listView}>
+                            <Text style={styles.titleText}>{item.name}</Text>
+                            <View style={styles.subtitleView}>
+                                <Text style={styles.subtitleText}>{item.contact}</Text>
+                                <Text style={styles.subtitleText}>{item.location}</Text>
+                                <Text style={styles.subtitleText}>{item.type}</Text>
+                            </View>
+                        </View>
+                    )}
+                />
             </View>
         );
     }
@@ -346,7 +384,7 @@ const AppNavigator = createSwitchNavigator(
         },
     },
     {
-        initialRouteName: 'Splash',
+        initialRouteName: 'Home',
     }
 );
 
